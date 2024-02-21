@@ -42,7 +42,7 @@ Options:
   -j, --json-rpc <url>                      JSON RPC URL where the program should be deployed
   -w9, --weth9-address <address>            Address of the WETH9 contract on this chain
   -ncl, --native-currency-label <string>    Native currency label, e.g. ETH
-  -o, --owner-address <address>             Contract address that will own the deployed artifacts after the script runs
+  -o, --owner-address <address>             Contract address that will own the deployed artifacts after the script runs (optional) (default: account from private key)
   -s, --state <path>                        Path to the JSON file containing the migrations state (optional) (default: "./state.json")
   -v2, --v2-core-factory-address <address>  The V2 core factory address used in the swap router (optional)
   -g, --gas-price <number>                  The gas price to pay in GWEI for each transaction (optional)

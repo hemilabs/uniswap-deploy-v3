@@ -14,9 +14,9 @@ program
   .requiredOption('-j, --json-rpc <url>', 'JSON RPC URL where the program should be deployed')
   .requiredOption('-w9, --weth9-address <address>', 'Address of the WETH9 contract on this chain')
   .requiredOption('-ncl, --native-currency-label <string>', 'Native currency label, e.g. ETH')
-  .requiredOption(
+  .option(
     '-o, --owner-address <address>',
-    'Contract address that will own the deployed artifacts after the script runs'
+    'Contract address that will own the deployed artifacts after the script runs (optional)'
   )
   .option('-s, --state <path>', 'Path to the JSON file containing the migrations state (optional)', './state.json')
   .option('-v2, --v2-core-factory-address <address>', 'The V2 core factory address used in the swap router (optional)')
@@ -82,15 +82,19 @@ if (typeof program.v2CoreFactoryAddress === 'undefined') {
   }
 }
 
-let ownerAddress: string
-try {
-  ownerAddress = getAddress(program.ownerAddress)
-} catch (error) {
-  console.error('Invalid owner address', (error as Error).message)
-  process.exit(1)
-}
-
 const wallet = new Wallet(program.privateKey, new JsonRpcProvider({ url: url.href }))
+
+let ownerAddress: string
+if (typeof program.ownerAddress === 'undefined') {
+  ownerAddress = wallet.address
+} else {
+  try {
+    ownerAddress = getAddress(program.ownerAddress)
+  } catch (error) {
+    console.error('Invalid owner address', (error as Error).message)
+    process.exit(1)
+  }
+}
 
 let state: MigrationState
 if (fs.existsSync(program.state)) {
